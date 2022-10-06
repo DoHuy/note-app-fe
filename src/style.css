@@ -1,0 +1,36 @@
+.floating-card {
+  margin: 20px 60px 50px 35px;
+  width: 80%;
+}
+
+.ant-layout.ant-layout-has-sider {
+  flex-direction: row;
+  height: 500px;
+}
+
+
+.ant-layout-sider.ant-layout-sider-dark {
+  background-color: rgb(255 255 255);
+  flex: 0 0 400px;
+  max-width: 400px;
+  min-width: 400px;
+  width: 400px;
+}
+
+#app {
+  height: 100vh;
+}
+
+.ql-container {
+  height: calc(100% - 42.3px) !important;
+}
+
+.ant-layout-sider-children {
+  overflow-y: auto !important;
+  overflow-x: hidden !important;
+}
+
+.ant-card {
+  background: #ededed !important;
+  border-radius: 20px !important;
+}
