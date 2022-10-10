@@ -2,12 +2,12 @@
   <a-layout-sider width="400px">
     <div v-for="(note, index) in allNotes" :key="index">
       <div @click="handleClickToCard(note)" class="floating-card">
-        <div v-if="targetedNote !== null && targetedNote.id === note.id">
+        <div v-bind:id="`${targetedNote.id}`" v-if="targetedNote !== null && targetedNote.id === note.id">
           <a-card hoverable :title="targetedNote.title">
             <p class="floating-card-ellipsis">{{computedTargetedNoteContent}}</p>
           </a-card>
         </div>
-        <div v-else>
+        <div v-bind:id="`${note.id}`" v-else>
           <a-card hoverable :title="note.title">
             <p class="floating-card-ellipsis">{{  `${moment(note.created_at).format("HH:mm A").toString()} ${note.content}` }}</p>
           </a-card>
@@ -27,7 +27,16 @@ const handleClickToCard = (note: Note) => {
       if (!note) {
         return
       }
+      const previousNote = document.getElementById(`${note.id}`)
+      if(previousNote) {
+        previousNote.style.backgroundColor = "#fff"
+      }
       targetedNote.value = { ...note }
+      const currentNote = document.getElementById(`${targetedNote.value.id}`)
+      if(currentNote) {
+        currentNote.style.backgroundColor = "#b9bcbd"
+      }
+
 }
 
 const computedTargetedNoteContent = computed(() => `${moment(targetedNote.value?.created_at).format("HH:mm A").toString()} ${targetedNote.value?.content}`)

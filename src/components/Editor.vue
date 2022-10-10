@@ -1,19 +1,27 @@
 <script setup lang="ts">
 import { QuillEditor } from "@vueup/vue-quill"
 import { computed, defineComponent, ref } from "vue"
-import { targetedNote } from "@/services/noteService"
-import moment from 'moment'
-function handleChange(event: any) {
-  const textAreaElm = document.getElementById('editor')
+import { allNotes, targetedNote, updateNote } from "@/services/noteService"
+
+async function handleChange(event: any) {
+  const textAreaElm = <HTMLInputElement>(document.getElementById('editor'))
   if(targetedNote && targetedNote.value && textAreaElm) {
     let textAreaContent = textAreaElm.value.split("\n")
     targetedNote.value.title = textAreaContent[0]
     textAreaContent.shift()
     targetedNote.value.content = textAreaContent.join("\n")
+    try {
+        //supabase not support broadcast directly data to postgres database
+        await updateNote({...targetedNote.value, updated_at: new Date()})
+        const index = allNotes.value.findIndex( note => note.id === targetedNote.value?.id)
+        allNotes.value[index] = targetedNote.value
+      } catch (e) {
+        console.error('Unknown error when updating note', e)
+      }
   }
 }
 
-const textAreaContent = computed(()=> targetedNote && targetedNote.value ? `${targetedNote.value.title}\n${targetedNote.value.content}` : "")
+const textAreaContent = computed(() => targetedNote && targetedNote.value ? `${targetedNote.value.title}\n${targetedNote.value.content}` : "")
 
 
 defineComponent({

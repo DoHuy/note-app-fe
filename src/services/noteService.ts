@@ -22,7 +22,7 @@ const fetchNotes = async () => {
       allNotes.value = []
       return
     }
-    allNotes.value = notes
+    allNotes.value = notes.reverse()
   } catch (err) {
     console.error("Error retrieving data from db", err)
   }
@@ -79,17 +79,17 @@ const updateNote = async (note: Note) => {
 /**
  *  Deletes a note via its id
  */
-const deleteNote = async (noteId: string) => {
+const deleteNote = async (noteId?: number) => {
   try {
     await supabase
       .from("notes")
       .delete()
       .eq("id", noteId)
-    console.log("deleted todo", noteId)
+    console.log("deleted note", noteId)
   } catch (error) {
     console.error("error", error)
   }
 }
 
-export { allNotes, targetedNote, content, fetchNotes, addNote, updateNote, deleteNote }
+export { allNotes, targetedNote, fetchNotes, addNote, updateNote, deleteNote }
 

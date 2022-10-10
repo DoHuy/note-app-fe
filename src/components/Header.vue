@@ -11,7 +11,7 @@
             <FormOutlined :style="{ fontSize: `20px` }" />
           </a-tooltip>
         </a-menu-item>
-        <a-menu-item>
+        <a-menu-item @click="removeNote()">
           <a-tooltip placement="topRight">
             <template>
               <span>Delete a note</span>
@@ -36,7 +36,8 @@
 import {handleLogout, userSession} from "@/services/authService"
 import { DeleteOutlined, FormOutlined, LogoutOutlined } from "@ant-design/icons-vue"
 import {defineComponent} from "vue"
-import {addNote, allNotes, fetchNotes} from "@/services/noteService"
+import {addNote, allNotes, deleteNote, fetchNotes, targetedNote} from "@/services/noteService"
+import { Note } from "@/types/interface"
 
 export default defineComponent({
   name: "NoteHeader",
@@ -57,7 +58,22 @@ export default defineComponent({
         if (!note) {
           return
         }
-        allNotes.value.push(note)
+        allNotes.value = [note, ...allNotes.value]
+      } catch (e) {
+        console.error('Unknown error when adding note', e)
+      }
+    }
+    async function removeNote() {
+      if(userSession?.value === null) {
+        alert("Please log in again")
+        return
+      }
+      if(!targetedNote) {
+        return
+      }
+      try {
+        await deleteNote(targetedNote.value?.id)
+        allNotes.value = allNotes.value.filter(note => note.id !== targetedNote.value?.id)
       } catch (e) {
         console.error('Unknown error when adding note', e)
       }
@@ -65,6 +81,7 @@ export default defineComponent({
     return {
       handleLogout,
       createNewNotes,
+      removeNote,
     }
   }
 })
