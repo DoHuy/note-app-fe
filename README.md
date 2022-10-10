@@ -1,7 +1,7 @@
-#Tech stack: Vue 3 + TypeScript + Vite + Supabase
+# Tech stack: Vue 3 + TypeScript + Vite + Supabase
 
 
-###Link demo
+### Link demo
 ```
 https://note-fe-ten.vercel.app/
 ```
